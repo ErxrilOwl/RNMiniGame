@@ -6,7 +6,7 @@ export default function App() {
     <View style={styles.appContainer}>
       <StartGameScreen />
     </View>
-  );
+  )
 }
 
 const styles = StyleSheet.create({
