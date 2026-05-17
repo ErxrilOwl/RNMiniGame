@@ -28,15 +28,16 @@ const styles = StyleSheet.create({
     }
 });
 
-export const PrimaryButton = ({ children }) => {
+export const PrimaryButton = ({ children, onPress }) => {
     return (
         <View style={styles.buttonOuterContainer}>
             <Pressable
-              style={({pressed}) => pressed ? [styles.buttonInnerContainer, styles.pressed] : styles.buttonInnerContainer}
-              android_ripple={{
+                onPress={onPress}
+                style={({pressed}) => pressed ? [styles.buttonInnerContainer, styles.pressed] : styles.buttonInnerContainer}
+                android_ripple={{
               color:
               '#3f0321'
-              }}>
+                }}>
                 <Text style={styles.buttonText}>{ children }</Text>
             </Pressable>
         </View>

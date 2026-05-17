@@ -1,5 +1,55 @@
-import { TextInput, View, StyleSheet } from 'react-native';
+import { TextInput, View, StyleSheet, Alert } from 'react-native';
 import { PrimaryButton } from '../components/PrimaryButton';
+import { useState } from 'react';
+
+
+export const StartGameScreen = () => {
+    const [enteredNumber, setEnteredNumber] = useState('');
+
+    const numberInputHandler = (input) => {
+        console.log(input)
+        setEnteredNumber(input);
+    }
+
+    const resetInputHandler = () => {
+        setEnteredNumber('')
+    }
+
+    const confirmInputHandler = () => {
+        const chosenNumber = parseInt(enteredNumber);
+
+        if (isNaN(chosenNumber) || chosenNumber <= 0 || chosenNumber > 99) {
+            Alert.alert('Invalid number!', 'Numbers has to be a number between 1 and 99.', [{
+                text: 'Okay',
+                style: 'destructive',
+                onPress: resetInputHandler
+            }])
+            return;
+        }
+    }
+
+    return (
+        <View style={styles.inputContainer}>
+            <TextInput
+              style={styles.numberInput}
+              maxLength={2}
+              keyboardType='number-pad'
+              autoCorrect={false}
+              autoCapitalize='none' 
+              onChangeText={numberInputHandler}
+              value={enteredNumber}
+              />
+            <View style={styles.buttonsContainer}>
+                <View style={styles.buttonContainer}>
+                    <PrimaryButton onPress={resetInputHandler}>Reset</PrimaryButton>
+                </View>
+                <View style={styles.buttonContainer}>
+                    <PrimaryButton onPress={confirmInputHandler}>Confirm</PrimaryButton>
+                </View>
+            </View>
+        </View>
+    )
+} 
 
 const styles = StyleSheet.create({
     inputContainer: {
@@ -21,7 +71,7 @@ const styles = StyleSheet.create({
     },
     numberInput: {
         height: 50,
-        width: 50,
+        width: 80,
         fontSize: 32,
         borderBottomColor: '#ddb52f',
         borderBottomWidth: 2,
@@ -38,24 +88,3 @@ const styles = StyleSheet.create({
         flex: 1
     }
 });
-
-export const StartGameScreen = () => {
-    return (
-        <View style={styles.inputContainer}>
-            <TextInput
-              style={styles.numberInput}
-              maxLength={2}
-              keyboardType='number-pad'
-              autoCorrect={false}
-              autoCapitalize='none' />
-            <View style={styles.buttonsContainer}>
-                <View style={styles.buttonContainer}>
-                    <PrimaryButton>Reset</PrimaryButton>
-                </View>
-                <View style={styles.buttonContainer}>
-                    <PrimaryButton>Confirm</PrimaryButton>
-                </View>
-            </View>
-        </View>
-    )
-} 
