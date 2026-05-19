@@ -1,6 +1,7 @@
-import { View, Text, StyleSheet } from "react-native"
+import { View, Text, StyleSheet, Alert } from "react-native"
 import { Title } from "../components/ui/Title"
 import { useState } from "react";
+import PrimaryButton from '../components/ui/PrimaryButton';
 import { NumberContainer } from "../components/game/NumberContainer";
 
 function generateRandomBetween(min, max, exclude) {
@@ -13,17 +14,47 @@ function generateRandomBetween(min, max, exclude) {
   }
 }
 
+let minBoundary = 1;
+let maxBoundary = 100;
+
 export const GameScreen = ({ userNumber }) => {
     const initialGuess = generateRandomBetween(1, 100, userNumber)
-    const [currentGuest, setCurrentGuess] = useState(initialGuess);
+    const [currentGuess, setCurrentGuess] = useState(initialGuess);
+    
 
+    const nextGuessHandler = (direction) => {
+        if (
+            (direction === 'lower' && currentGuess < userNumber) || 
+            (direction === 'lower' && currentGuess > userNumber)) {
+            Alert.alert("Don't lie!", "You know that this is wrong...", [
+                {
+                    text: "Sorry!",
+                    style: "cancel"
+                }
+            ])
+            return;
+        }
+
+        if (direction === 'lower') {
+            maxBoundary = currentGuess;
+        } else {
+            minBoundary = currentGuess + 1;
+        }
+        
+        const newRndNumber = generateRandomBetween(minBoundary, maxBoundary, currentGuess);
+        setCurrentGuess(newRndNumber);
+    }
 
     return (
         <View style={styles.screen}>
             <Title>Opponent's Guess</Title>
-            <NumberContainer>{ currentGuest }</NumberContainer>
+            <NumberContainer>{ currentGuess }</NumberContainer>
             <View>
                 <Text>Higher or Lower?</Text>
+                <View>
+                    <PrimaryButton onPress={() => nextGuessHandler('lower')}>-</PrimaryButton>
+                    <PrimaryButton onPress={() => nextGuessHandler('greater')}>+</PrimaryButton>
+                </View>
             </View>
             <View>
                 <Text>Log Rounds</Text>
