@@ -1,5 +1,4 @@
 import { StyleSheet, Text } from "react-native"
-import Colors from "../../constants/colors";
 
 export const Title = ({ children }) => {
     return <Text style={styles.title}>{ children }</Text>
@@ -7,6 +6,7 @@ export const Title = ({ children }) => {
 
 const styles = StyleSheet.create({
     title: {
+        fontFamily: 'open-sans',
         fontSize: 24,
         fontWeight: 'bold',
         color: 'white',
