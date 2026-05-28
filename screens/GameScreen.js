@@ -92,7 +92,8 @@ export const GameScreen = ({ userNumber, onGameOver }) => {
 const styles = StyleSheet.create({
     screen: {
         flex: 1,
-        padding: 24
+        padding: 24,
+        alignItems: 'center'
     },
     instructionText: {
         marginBottom: 12
