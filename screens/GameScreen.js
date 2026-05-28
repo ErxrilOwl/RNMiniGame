@@ -1,4 +1,4 @@
-import { View, Text, StyleSheet, Alert } from "react-native"
+import { View, Text, StyleSheet, Alert, FlatList } from "react-native"
 import { Title } from "../components/ui/Title"
 import { useEffect, useState } from "react";
 import { Ionicons } from '@expo/vector-icons';
@@ -23,6 +23,7 @@ let maxBoundary = 100;
 export const GameScreen = ({ userNumber, onGameOver }) => {
     const initialGuess = generateRandomBetween(1, 100, userNumber)
     const [currentGuess, setCurrentGuess] = useState(initialGuess);
+    const [guessRounds, setGuessRounds] = useState([initialGuess]);
     
     useEffect(() => {
         if (currentGuess === userNumber) {
@@ -33,12 +34,12 @@ export const GameScreen = ({ userNumber, onGameOver }) => {
     useEffect(() => {
         minBoundary = 1;
         maxBoundary = 100;
-    })
+    }, [])
 
     const nextGuessHandler = (direction) => {
         if (
             (direction === 'lower' && currentGuess < userNumber) || 
-            (direction === 'lower' && currentGuess > userNumber)) {
+            (direction === 'higher' && currentGuess > userNumber)) {
             Alert.alert("Don't lie!", "You know that this is wrong...", [
                 {
                     text: "Sorry!",
@@ -56,6 +57,7 @@ export const GameScreen = ({ userNumber, onGameOver }) => {
         
         const newRndNumber = generateRandomBetween(minBoundary, maxBoundary, currentGuess);
         setCurrentGuess(newRndNumber);
+        setGuessRounds(prevGuessRounds => [newRndNumber, ...prevGuessRounds])
     }
 
     return (
@@ -73,9 +75,13 @@ export const GameScreen = ({ userNumber, onGameOver }) => {
                     </View>
                 </View>
             </Card>
-            <Card>
-                <Text>Log Rounds</Text>
-            </Card>
+            
+            <View>
+                <FlatList
+                    data={guessRounds} 
+                    renderItem={(itemData) => <Text>{ itemData.item }</Text>} 
+                    keyExtractor={(item) => item }/>
+            </View>
         </View>
     )
 }
